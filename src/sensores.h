@@ -45,8 +45,13 @@
 #define PIN_RD   def_pin_reg(PORT_RD_NAME)
 #define DDR_RD   def_ddr_reg(PORT_RD_NAME)
 
-#define OCR_EMISORES_SUP			    99
-#define CANT_PULSOS_ALTO_EM_SUP		50
+// el período de la salida del emisor son 215 ciclos de reloj
+// ( 8 MHz / 38 KHz)
+#define OCR_EMISOR_TIEMPO_EN_ALTO		    107
+#define OCR_EMISOR_TIEMPO_EN_BAJO		    108
+
+#define TIMER_ON (0<<CS22)|(0<<CS21)|(1<<CS20)
+#define TIMER_OFF (0<<CS22)|(0<<CS21)|(0<<CS20)
 
 
 void configurarPinSensoresSup();

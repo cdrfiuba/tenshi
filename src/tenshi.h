@@ -91,10 +91,10 @@
 
 
 typedef enum {
-	FIGHT_ADELANTE,
-  FIGHT_ATRAS,
-	TRACKING,
-	DETENIDO
+    FIGHT_ADELANTE,
+    FIGHT_ATRAS,
+    TRACKING,
+    DETENIDO
 } estados;
 
 
