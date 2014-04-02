@@ -47,13 +47,15 @@
 
 // ( 8 MHz / 38 KHz) = 210.5263 => 210 / 2 = 105
 #define OCR_EMISOR_TIEMPO_CICLOS		    105
+// 1 / 38095 Hz * 1000 * 1000 = 26,25 us ==> 23 interrupciones son 603,75 us
+#define CANTIDAD_DE_INTERRUPCIONES          23
 
-#define TIMER_ON (0<<CS22)|(0<<CS21)|(1<<CS20)
-#define TIMER_OFF (0<<CS22)|(0<<CS21)|(0<<CS20)
+#define TIMER_ON       (0 << CS22) | (0 << CS21) | (1 << CS20)
+#define TIMER_OFF      (0 << CS22) | (0 << CS21) | (0 << CS20)
+#define TIMER_OFF_MASK (1 << CS22) | (1 << CS21) | (1 << CS20)
 
 
-void configurarPinSensoresSup();
-void configurarTimerSensoresSup();
+void configurarSensoresSuperiores();
 
 void encenderEmisorSuperior();
 void apagarEmisorSuperior();

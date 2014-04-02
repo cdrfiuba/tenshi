@@ -1,7 +1,7 @@
 #include <avr/interrupt.h>
 #include "sensores.h"
 
-#include "mjolnir.h"
+#include "tenshi.h"
 #include <util/delay.h>
 /*
 COMO USAR EL SENSOR PL-IRM0101-3
@@ -24,23 +24,45 @@ un toggle del PORT en cada interrupción. En ambos modos se cuentan 23
 interrupciones (1 / 38095 Hz * 1000 * 1000 = 26,25 us ==> 23 interrupciones 
 son 603,75 us) para cambiar de modo.
 
-
 */
 
-void configurarTimerSensoresSup () {
+volatile uint8_t contadorInterrupcionesEmisorSuperior = 0;
+typedef enum {
+    MODO_CERO,
+    MODO_OSCILAR
+} t_modosOperacionEmisorSuperior;
+volatile t_modosOperacionEmisorSuperior modoOperacionEmisorSuperior;
+
+ISR(TIMER2_COMPA_vect) {
+    contadorInterrupcionesEmisorSuperior++;
+	if (contadorInterrupcionesEmisorSuperior == CANTIDAD_DE_INTERRUPCIONES) {
+        contadorInterrupcionesEmisorSuperior = 0;
+        if (modoOperacionEmisorSuperior == MODO_CERO) {
+            ClearBit(PORT_EMI, EMI_NUMBER);
+            modoOperacionEmisorSuperior = MODO_OSCILAR;
+        } else {
+            modoOperacionEmisorSuperior = MODO_CERO;
+        }
+    }
+    if (modoOperacionEmisorSuperior == MODO_OSCILAR) {
+        // escribir al PIN implica un ToggleBit
+        SetBit(PIN_EMI, EMI_NUMBER); 
+    }
+}
+
+void configurarSensoresSuperiores() {
 	// Se configura el timer 2 en modo CTC segun las definiciones del .h
 
-	TCCR2A = (0<<COM2A1)|(0<<COM2A0)|(0<<COM2B1)|(0<<COM2B0)|(1<<WGM21)|(0<<WGM20);
-	TCCR2B = (0<<WGM22)|TIMER_ON;
+	TCCR2A = (0 << COM2A1) | (0 << COM2A0) | (0 << COM2B1) | (0 << COM2B0) | (1 << WGM21) | (0 << WGM20);
+	TCCR2B = (0 << WGM22) | TIMER_ON;
 	
 	TCNT2 = 0;
 	OCR2A = OCR_EMISOR_TIEMPO_CICLOS;
 
 	// CTC esta con OCR2A
-	TIMSK2 = (0<<OCIE2B)|(1<<OCIE2A)|(0<<TOIE2);
-}
+	TIMSK2 = (0 << OCIE2B) | (1 << OCIE2A) | (0 << TOIE2);
 
-void configurarPinSensoresSup () {
+    // configura emisor como salida, receptores como entrada
     SetBit(DDR_EMI, EMI_NUMBER);
     ClearBit(PORT_EMI, EMI_NUMBER);
 
@@ -56,35 +78,21 @@ void configurarPinSensoresSup () {
     ClearBit(DDR_RD, RD_NUMBER);
     SetBit(PORT_RD, RD_NUMBER);
 
-    PCICR |= (1<<PCIE2);
+    // interrupciones PCINT23/16 en botón
+    PCICR |= (1 << PCIE2);
+
+    // activa interrupción PCINT21
+    PCMSK2 = (1 << PCINT21);
     //PCMSK2 = (1<<PCINT18) | (1<<PCINT19) | (1<<PCINT20) | (1<<PCINT21);
-    PCMSK2 = (1<<PCINT21);
 
 }
 
-void encenderEmisorSuperior(){
-	ClearBit(TCCR2B, CS22);
-	ClearBit(TCCR2B, CS21);
-	SetBit(TCCR2B, CS20);
+void encenderEmisorSuperior() {
+    TCCR2B |= TIMER_ON;
 }
 
-void apagarEmisorSuperior(){
-	ClearBit(TCCR2B, CS22);
-	ClearBit(TCCR2B, CS21);
-	ClearBit(TCCR2B, CS20);
-}
-
-volatile uint8_t contPulsosEm = 0;
-
-ISR(TIMER2_COMPA_vect) {
-	// Cuando se da la comparacion cambio el estado del pin solo si estoy en alto,
-	// pueEs de los 215 ciclos, paso 107 en alto y 108 en alto
-	if (OCR2A == OCR_EMISOR_TIEMPO_EN_ALTO) {
-    	OCR2A = OCR_EMISOR_TIEMPO_EN_BAJO;
-	} else {
-    	OCR2A = OCR_EMISOR_TIEMPO_EN_ALTO;
-	}
-	SetBit(PIN_EMI, EMI_NUMBER);
+void apagarEmisorSuperior() {
+    TCCR2B &= ~(TIMER_OFF_MASK);
 }
 
 ISR(PCINT2_vect){

@@ -1,5 +1,5 @@
-#ifndef _MJOLNIR_H_
-#define _MJOLNIR_H_
+#ifndef _TENSHI_H_
+#define _TENSHI_H_
 
 #include <avr/io.h>
 #include "definiciones.h"
