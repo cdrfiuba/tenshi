@@ -31,9 +31,14 @@ SRC = tenshi.c motores.c sensores.c
 # INC contiene el nombre de todos los .h existentes en el directorio actual
 INC = tenshi.h motores.h sensores.h definiciones.h 
 
-# Flags de optimizacion '-Os' tamaño '-O3' velocidad
-# Si se deja -O vacio el compilador elige '-01'
-CFLAGS = -O2 -Wall
+# gcc manual: http://gcc.gnu.org/onlinedocs/gcc/
+# -Os: [gcc manual] Optimize for size. -Os enables all -O2 optimizations that do not typically increase code size. It also performs further optimizations designed to reduce code size. 
+# -Wall -Wextra: a lot of warnings.
+# -funsafe-loop-optimizations -Wunsafe-loop-optimizations: optimize out-of-bounds loops by removing check, but do the check at compile time.
+# -mcall-prologues: [gcc manual] Functions prologues/epilogues are expanded as calls to appropriate subroutines. Code size is smaller.
+# -std=gnu99: uses the extended C 99 standard. See http://gcc.gnu.org/onlinedocs/gcc/Standards.html
+# -mrelax: [gcc manual] Try to replace CALL resp. JMP instruction by the shorter RCALL resp. RJMP instruction if applicable.
+CFLAGS = -Os -Wall -Wextra -funsafe-loop-optimizations -Wunsafe-loop-optimizations -mcall-prologues -std=gnu99 -mrelax
 
 CDEFINES = -DF_CPU=$(CLK)
 

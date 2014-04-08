@@ -65,10 +65,10 @@
 #define LedAToggle()  SetBit(PIN_LEDA, LEDA_NUMBER)
 
 
-#define LedDInit()  {SetBit(DDR_LEDD, LEDD_NUMBER);LedDOff();}
-#define LedCInit()  {SetBit(DDR_LEDC, LEDC_NUMBER);LedCOff();}
-#define LedBInit()  {SetBit(DDR_LEDB, LEDB_NUMBER);LedBOff();}
-#define LedAInit()  {SetBit(DDR_LEDA, LEDA_NUMBER);LedAOff();}
+#define LedDInit()  SetBit(DDR_LEDD, LEDD_NUMBER); LedDOff();
+#define LedCInit()  SetBit(DDR_LEDC, LEDC_NUMBER); LedCOff();
+#define LedBInit()  SetBit(DDR_LEDB, LEDB_NUMBER); LedBOff();
+#define LedAInit()  SetBit(DDR_LEDA, LEDA_NUMBER); LedAOff();
 
 
 
@@ -84,7 +84,7 @@
 /* Macros */
 // Se setea como entrada y se pone el pin en '1'. Esto último hace que se 
 // active el pull-up interno
-#define PulsadorInit()  {ClearBit(DDR_PULSADOR, PULSADOR_NUMBER); SetBit(PORT_PULSADOR, PULSADOR_NUMBER);}
+#define PulsadorInit()  ClearBit(DDR_PULSADOR, PULSADOR_NUMBER); SetBit(PORT_PULSADOR, PULSADOR_NUMBER);
 
 // lee el pin del boton de arranque
 #define IsPulsadorSet()   IsBitSet(PIN_PULSADOR, PULSADOR_NUMBER)

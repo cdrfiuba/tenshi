@@ -29,24 +29,24 @@ int main (void) {
 }
 
 void setup() {
-  LedDInit();  
-  LedCInit();  
-  LedBInit();  
-  LedAInit();
-  configurarPulsador();
-  configurarMotores();
-//  configurarPinSensoresSup();
-//  configurarTimerSensoresSup();
-//  configurarMotorPolleras();
-  estadoActual = DETENIDO;
-  sei();
+	LedDInit(); 
+	LedCInit(); 
+	LedBInit(); 
+	LedAInit(); 
+	configurarPulsador();
+	configurarMotores();
+	//  configurarPinSensoresSup();
+	//  configurarTimerSensoresSup();
+	//  configurarMotorPolleras();
+	estadoActual = DETENIDO;
+	sei();
 }
 
 void configurarPulsador(void){
 	PulsadorInit();
 	// Configuro el pin change
-	PCICR |= (1<<PCIE0);
-	PCMSK0 = (1<<PCINT0);
+	PCICR |= (1 << PCIE0);
+	PCMSK0 = (1 << PCINT0);
 }
 
 ISR(PCINT0_vect) {

@@ -11,11 +11,11 @@
 
 /*RFI = Receptor Frontal Izquierdo*/
 #define PORT_RA_NAME D
-#define RA_NUMBER    2
+#define RA_NUMBER    3
 
 /*RFD = Receptor Frontal Derecho*/
 #define PORT_RB_NAME D
-#define RB_NUMBER    3
+#define RB_NUMBER    5
 
 /*RTI = Receptor Trasero Izquierdo*/
 #define PORT_RC_NAME D
@@ -23,7 +23,7 @@
 
 /*RTD = Receptor Trasero Derecho*/
 #define PORT_RD_NAME D
-#define RD_NUMBER    5
+#define RD_NUMBER    2
 
 #define PORT_EMI  def_port_reg(PORT_EMI_NAME)
 #define PIN_EMI   def_pin_reg(PORT_EMI_NAME)

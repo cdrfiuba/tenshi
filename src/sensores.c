@@ -78,13 +78,12 @@ void configurarSensoresSuperiores() {
     ClearBit(DDR_RD, RD_NUMBER);
     SetBit(PORT_RD, RD_NUMBER);
 
-    // interrupciones PCINT23/16 en botón
+    // interrupciones PCINT16~23 en botón
     PCICR |= (1 << PCIE2);
 
-    // activa interrupción PCINT21
-    PCMSK2 = (1 << PCINT21);
-    //PCMSK2 = (1<<PCINT18) | (1<<PCINT19) | (1<<PCINT20) | (1<<PCINT21);
-
+	// los sensores están en PCINT19, PCINT21, PCINT20, PCINT18
+    // activa interrupciones (los PC son por toggle)
+    PCMSK2 = (1 << PCINT18) | (1 << PCINT19) | (1 << PCINT20) | (1 << PCINT21);
 }
 
 void encenderEmisorSuperior() {
@@ -95,16 +94,11 @@ void apagarEmisorSuperior() {
     TCCR2B &= ~(TIMER_OFF_MASK);
 }
 
-ISR(PCINT2_vect){
-  if (IsBitSet(PIN_RA, RA_NUMBER)) LedAOn();
-  else LedAOff();
-  if (IsBitSet(PIN_RB, RB_NUMBER)) LedBOn();
-  else LedBOff();
-  if (IsBitSet(PIN_RC, RC_NUMBER)) LedCOn();
-  else LedCOff();
-  if (IsBitSet(PIN_RD, RD_NUMBER)) LedDOn();
-  else LedDOff();
-//  _delay_ms(250);
-  SetBit(PCIFR, PCIF2);
+// interrupciones de sensores
+ISR(PCINT2_vect) {
+	IsBitSet(PIN_RA, RA_NUMBER) ? LedAOn() : LedAOff();
+	IsBitSet(PIN_RB, RB_NUMBER) ? LedBOn() : LedBOff();
+	IsBitSet(PIN_RC, RC_NUMBER) ? LedCOn() : LedCOff();
+	IsBitSet(PIN_RD, RD_NUMBER) ? LedDOn() : LedDOff();
 }
 
