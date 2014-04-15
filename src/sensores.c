@@ -26,6 +26,8 @@ son 603,75 us) para cambiar de modo.
 
 */
 
+
+
 volatile uint8_t contadorInterrupcionesEmisorSuperior = 0;
 typedef enum {
     MODO_CERO,
@@ -33,34 +35,61 @@ typedef enum {
 } t_modosOperacionEmisorSuperior;
 volatile t_modosOperacionEmisorSuperior modoOperacionEmisorSuperior;
 
+volatile uint32_t acumuladorReceptorA = 0;
+//volatile uint32_t acumuladorReceptorB = 0;
+//volatile uint32_t acumuladorReceptorC = 0;
+//volatile uint32_t acumuladorReceptorD = 0;
+volatile uint32_t contadorInterrupcionesReceptores = 0;
+
 ISR(TIMER2_COMPA_vect) {
     contadorInterrupcionesEmisorSuperior++;
-	if (contadorInterrupcionesEmisorSuperior == CANTIDAD_DE_INTERRUPCIONES) {
+    if (contadorInterrupcionesEmisorSuperior == CANTIDAD_DE_INTERRUPCIONES_EMISORES_SUPERIORES) {
         contadorInterrupcionesEmisorSuperior = 0;
         if (modoOperacionEmisorSuperior == MODO_CERO) {
-            ClearBit(PORT_EMI, EMI_NUMBER);
             modoOperacionEmisorSuperior = MODO_OSCILAR;
         } else {
             modoOperacionEmisorSuperior = MODO_CERO;
+            ClearBit(PORT_EMI, EMI_NUMBER);
         }
     }
     if (modoOperacionEmisorSuperior == MODO_OSCILAR) {
         // escribir al PIN implica un ToggleBit
         SetBit(PIN_EMI, EMI_NUMBER); 
     }
+    
+    // para umbral de sensibilidad de receptores (conversión AD manual)
+    contadorInterrupcionesReceptores++;
+    if (contadorInterrupcionesReceptores == CANTIDAD_DE_INTERRUPCIONES_EMISORES_RECEPTORES) {
+        // a 200 interrupciones, esto se resetea cada 5,25ms.
+        contadorInterrupcionesReceptores = 0;
+        acumuladorReceptorA = 0;
+        //acumuladorReceptorB = 0;
+        //acumuladorReceptorC = 0;
+        //acumuladorReceptorD = 0;
+    }
+
+    // sensor A
+    if (EsActivoReceptorA()) {
+        acumuladorReceptorA++;
+    }
+    (acumuladorReceptorA >   1) ? LedAOn() : LedAOff();
+    (acumuladorReceptorA >  46) ? LedBOn() : LedBOff();
+    (acumuladorReceptorA >  92) ? LedCOn() : LedCOff();
+    (acumuladorReceptorA > 184) ? LedDOn() : LedDOff();
+    
 }
 
 void configurarSensoresSuperiores() {
-	// Se configura el timer 2 en modo CTC segun las definiciones del .h
+    // Se configura el timer 2 en modo CTC segun las definiciones del .h
 
-	TCCR2A = (0 << COM2A1) | (0 << COM2A0) | (0 << COM2B1) | (0 << COM2B0) | (1 << WGM21) | (0 << WGM20);
-	TCCR2B = (0 << WGM22) | TIMER_ON;
-	
-	TCNT2 = 0;
-	OCR2A = OCR_EMISOR_TIEMPO_CICLOS;
+    TCCR2A = (0 << COM2A1) | (0 << COM2A0) | (0 << COM2B1) | (0 << COM2B0) | (1 << WGM21) | (0 << WGM20);
+    TCCR2B = (0 << WGM22) | TIMER_ON;
 
-	// CTC esta con OCR2A
-	TIMSK2 = (0 << OCIE2B) | (1 << OCIE2A) | (0 << TOIE2);
+    TCNT2 = 0;
+    OCR2A = OCR_EMISOR_TIEMPO_CICLOS;
+
+    // CTC esta con OCR2A
+    TIMSK2 = (0 << OCIE2B) | (1 << OCIE2A) | (0 << TOIE2);
 
     // configura emisor como salida, receptores como entrada
     SetBit(DDR_EMI, EMI_NUMBER);
@@ -78,12 +107,15 @@ void configurarSensoresSuperiores() {
     ClearBit(DDR_RD, RD_NUMBER);
     SetBit(PORT_RD, RD_NUMBER);
 
-    // interrupciones PCINT16~23 en botón
-    PCICR |= (1 << PCIE2);
 
-	// los sensores están en PCINT19, PCINT21, PCINT20, PCINT18
+    // debug de leds con interrupciones en receptor
+    
+    // interrupciones PCINT16~23 en pin
+    //PCICR |= (1 << PCIE2);
+
+    // los sensores están en PCINT19, PCINT21, PCINT20, PCINT18
     // activa interrupciones (los PC son por toggle)
-    PCMSK2 = (1 << PCINT18) | (1 << PCINT19) | (1 << PCINT20) | (1 << PCINT21);
+    //PCMSK2 = (1 << PCINT18) | (1 << PCINT19) | (1 << PCINT20) | (1 << PCINT21);
 }
 
 void encenderEmisorSuperior() {
@@ -96,9 +128,9 @@ void apagarEmisorSuperior() {
 
 // interrupciones de sensores
 ISR(PCINT2_vect) {
-	IsBitSet(PIN_RA, RA_NUMBER) ? LedAOn() : LedAOff();
-	IsBitSet(PIN_RB, RB_NUMBER) ? LedBOn() : LedBOff();
-	IsBitSet(PIN_RC, RC_NUMBER) ? LedCOn() : LedCOff();
-	IsBitSet(PIN_RD, RD_NUMBER) ? LedDOn() : LedDOff();
+    // debug
+    !IsBitSet(PIN_RA, RA_NUMBER) ? LedAOn() : LedAOff();
+    !IsBitSet(PIN_RB, RB_NUMBER) ? LedBOn() : LedBOff();
+    !IsBitSet(PIN_RC, RC_NUMBER) ? LedCOn() : LedCOff();
+    !IsBitSet(PIN_RD, RD_NUMBER) ? LedDOn() : LedDOff();
 }
-

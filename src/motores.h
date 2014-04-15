@@ -26,8 +26,8 @@
 #define PORT_MI_IN1_NAME  C
 #define MI_IN1_NUMBER     4
 /*MI_IN2 = Motor Izquierdo IN2*/
-#define PORT_MI_IN2_NAME	 C
-#define MI_IN2_NUMBER		   5
+#define PORT_MI_IN2_NAME     C
+#define MI_IN2_NUMBER           5
 
 /*MD_IN1 = Motor Derecho IN1*/
 #define PORT_MD_IN1_NAME  D
@@ -63,13 +63,13 @@
 
 /* Macros */
 #define apagarMotores() {ClearBit(PORT_MD_EN, MD_EN_NUMBER);ClearBit(PORT_MI_EN, MI_EN_NUMBER);}
-#define encenderMotores() {SetBit(PORT_MD_EN, MD_EN_NUMBER);SetBit(PORT_MI_EN, MI_EN_NUMBER);}
+#define encenderMotores() {SetBit(PORT_MD_EN, MD_EN_NUMBER);  SetBit(PORT_MI_EN, MI_EN_NUMBER);}
 
 /*-----------------------------------------------*/
 
-void motoresApagar(void);
-void motoresEncender(void);
-void configurarMotores(void);
+void motoresApagar();
+void motoresEncender();
+void configurarMotores();
 
 void motoresAvanzar();
 void motoresRetroceder();
@@ -77,4 +77,5 @@ void motoresGirarIzquierda();
 void motoresGirarDerecha();
 
 void configurarMotorPolleras();
+
 #endif

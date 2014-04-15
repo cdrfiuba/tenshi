@@ -7,36 +7,36 @@
 /* Definiciones correspondientes a los pines de los LEDs */
 
 /*LEDD = LED D Atras Derecha*/
-#define PORT_LEDD_NAME	C
-#define LEDD_NUMBER	    2
+#define PORT_LEDD_NAME    C
+#define LEDD_NUMBER        2
 
 /*LEDC = LED C Atras Izquierda*/
-#define PORT_LEDC_NAME	C
-#define LEDC_NUMBER	    3
+#define PORT_LEDC_NAME    C
+#define LEDC_NUMBER        3
 
 /*LEDB = LED B Adelante Derecha*/
-#define PORT_LEDB_NAME	C
-#define LEDB_NUMBER	    1
+#define PORT_LEDB_NAME    C
+#define LEDB_NUMBER        1
 
 /*LEDA = LED A  Adelante Izquierda*/
-#define PORT_LEDA_NAME	C
-#define LEDA_NUMBER	    0
+#define PORT_LEDA_NAME    C
+#define LEDA_NUMBER        0
 
 #define PORT_LEDD     def_port_reg(PORT_LEDD_NAME)
 #define PIN_LEDD      def_pin_reg(PORT_LEDD_NAME)
 #define DDR_LEDD      def_ddr_reg(PORT_LEDD_NAME)
 
-#define PORT_LEDC	def_port_reg(PORT_LEDC_NAME)
-#define PIN_LEDC	def_pin_reg(PORT_LEDC_NAME)
-#define DDR_LEDC	def_ddr_reg(PORT_LEDC_NAME)
+#define PORT_LEDC    def_port_reg(PORT_LEDC_NAME)
+#define PIN_LEDC    def_pin_reg(PORT_LEDC_NAME)
+#define DDR_LEDC    def_ddr_reg(PORT_LEDC_NAME)
 
-#define PORT_LEDB	def_port_reg(PORT_LEDB_NAME)
-#define PIN_LEDB	def_pin_reg(PORT_LEDB_NAME)
-#define DDR_LEDB	def_ddr_reg(PORT_LEDB_NAME)
+#define PORT_LEDB    def_port_reg(PORT_LEDB_NAME)
+#define PIN_LEDB    def_pin_reg(PORT_LEDB_NAME)
+#define DDR_LEDB    def_ddr_reg(PORT_LEDB_NAME)
 
-#define PORT_LEDA	def_port_reg(PORT_LEDA_NAME)
-#define PIN_LEDA	def_pin_reg(PORT_LEDA_NAME)
-#define DDR_LEDA	def_ddr_reg(PORT_LEDA_NAME)
+#define PORT_LEDA    def_port_reg(PORT_LEDA_NAME)
+#define PIN_LEDA    def_pin_reg(PORT_LEDA_NAME)
+#define DDR_LEDA    def_ddr_reg(PORT_LEDA_NAME)
 
 
 
@@ -97,5 +97,8 @@ typedef enum {
     DETENIDO
 } estados;
 
+void setup();
+void configurarPulsador();
+void bajarPollera();
 
 #endif

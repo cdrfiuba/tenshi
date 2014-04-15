@@ -5,13 +5,13 @@ TARGET = tenshi
 
 # MMCU es el microcontralador para el target para el avr-gcc
 # Para ver el listado de posibles opciones ir a:
-#      http://avr-libc.nongnu.org/user-manual/index.html
+#	  http://avr-libc.nongnu.org/user-manual/index.html
 MMCU = atmega88
 
 # TARGET_P es el microcontrolador para el target del programador
 # Para el Atemga88: m88
 # Para ver el listado de posibles opciones hacer:
-#      avrdude -p ?
+#	  avrdude -p ?
 TARGET_P = m88
 
 # HFUSE 
