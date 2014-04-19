@@ -1,0 +1,9 @@
+PCBNEW-LibDoc----V1  Sat 23 Oct 2010 01:01:01 ART
+#
+$MODULE L298D
+Li L298D
+Cd Multiwatt11
+Kw Multiwatt11 L6203
+$EndMODULE
+#
+$EndLIBDOC
