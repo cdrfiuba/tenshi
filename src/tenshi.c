@@ -6,6 +6,12 @@
 #include "sensores.h"
 #include "tenshi.h"
 
+// sensores
+extern volatile uint32_t acumuladorReceptorA;
+extern volatile uint32_t acumuladorReceptorB;
+extern volatile uint32_t acumuladorReceptorC;
+extern volatile uint32_t acumuladorReceptorD;
+
 volatile estados estadoActual;
 
 int main () {
@@ -13,14 +19,17 @@ int main () {
 
     while (estadoActual == DETENIDO);
     while (1) {
-        motoresAvanzar();
-        _delay_ms(250);
-        motoresRetroceder();
-        _delay_ms(250);
-        motoresGirarDerecha();
-        _delay_ms(250);
-        motoresGirarIzquierda();
-        _delay_ms(250);
+
+        if (acumuladorReceptorD < 20) {
+            encenderMotores();
+            motoresAvanzar();
+        } else if (acumuladorReceptorD >= 20 && acumuladorReceptorD <= 70) {
+            apagarMotores();
+        } else if (acumuladorReceptorD > 70) {
+            encenderMotores();
+            motoresRetroceder();
+        }
+
     }
 }
 

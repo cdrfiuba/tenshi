@@ -64,6 +64,7 @@
 #define EsActivoReceptorC()   !IsBitSet(PIN_RC, RC_NUMBER)
 #define EsActivoReceptorD()   !IsBitSet(PIN_RD, RD_NUMBER)
 
+
 void configurarSensoresSuperiores();
 
 void encenderEmisorSuperior();

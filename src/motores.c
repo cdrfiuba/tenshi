@@ -16,34 +16,34 @@ void configurarMotores() {
 
 void motoresAvanzar() {
     ClearBit(PORT_MI_IN1, MI_IN1_NUMBER);
-    SetBit(PORT_MI_IN2, MI_IN2_NUMBER);
+      SetBit(PORT_MI_IN2, MI_IN2_NUMBER);
 
     ClearBit(PORT_MD_IN1, MD_IN1_NUMBER);
-    SetBit(PORT_MD_IN2, MD_IN2_NUMBER);
+      SetBit(PORT_MD_IN2, MD_IN2_NUMBER);
 }
 
 void motoresGirarIzquierda() {
     ClearBit(PORT_MI_IN1, MI_IN1_NUMBER);
-    SetBit(PORT_MI_IN2, MI_IN2_NUMBER);
+      SetBit(PORT_MI_IN2, MI_IN2_NUMBER);
 
     ClearBit(PORT_MD_IN1, MD_IN1_NUMBER);
-    SetBit(PORT_MD_IN2, MD_IN2_NUMBER);
+      SetBit(PORT_MD_IN2, MD_IN2_NUMBER);
 }
 
 void motoresGirarDerecha() {
     ClearBit(PORT_MI_IN1, MI_IN1_NUMBER);
-    SetBit(PORT_MI_IN2, MI_IN2_NUMBER);
+      SetBit(PORT_MI_IN2, MI_IN2_NUMBER);
 
     ClearBit(PORT_MD_IN1, MD_IN1_NUMBER);
-    SetBit(PORT_MD_IN2, MD_IN2_NUMBER);
+      SetBit(PORT_MD_IN2, MD_IN2_NUMBER);
 }
 
 void motoresRetroceder() {
-    SetBit(PORT_MI_IN1, MI_IN2_NUMBER);
-    ClearBit(PORT_MI_IN2, MI_IN1_NUMBER);
+      SetBit(PORT_MI_IN1, MI_IN1_NUMBER);
+    ClearBit(PORT_MI_IN2, MI_IN2_NUMBER);
 
-    SetBit(PORT_MD_IN1, MD_IN2_NUMBER);
-    ClearBit(PORT_MD_IN2, MD_IN1_NUMBER);
+      SetBit(PORT_MD_IN1, MD_IN1_NUMBER);
+    ClearBit(PORT_MD_IN2, MD_IN2_NUMBER);
 }
 
 void configurarMotorPolleras() {

@@ -26,8 +26,7 @@ son 603,75 us) para cambiar de modo.
 
 */
 
-
-
+// para el timer 2
 volatile uint8_t contadorInterrupcionesEmisorSuperior = 0;
 typedef enum {
     MODO_CERO,
@@ -36,9 +35,9 @@ typedef enum {
 volatile t_modosOperacionEmisorSuperior modoOperacionEmisorSuperior;
 
 volatile uint32_t acumuladorReceptorA = 0;
-//volatile uint32_t acumuladorReceptorB = 0;
-//volatile uint32_t acumuladorReceptorC = 0;
-//volatile uint32_t acumuladorReceptorD = 0;
+volatile uint32_t acumuladorReceptorB = 0;
+volatile uint32_t acumuladorReceptorC = 0;
+volatile uint32_t acumuladorReceptorD = 0;
 volatile uint32_t contadorInterrupcionesReceptores = 0;
 
 ISR(TIMER2_COMPA_vect) {
@@ -60,22 +59,26 @@ ISR(TIMER2_COMPA_vect) {
     // para umbral de sensibilidad de receptores (conversión AD manual)
     contadorInterrupcionesReceptores++;
     if (contadorInterrupcionesReceptores == CANTIDAD_DE_INTERRUPCIONES_EMISORES_RECEPTORES) {
+
+        // debug
+        //(acumuladorReceptorD >   1) ? LedAOn() : LedAOff();
+        //(acumuladorReceptorD >  30) ? LedBOn() : LedBOff();
+        //(acumuladorReceptorD >  50) ? LedCOn() : LedCOff();
+        //(acumuladorReceptorD >  80) ? LedDOn() : LedDOff();
+        
         // a 200 interrupciones, esto se resetea cada 5,25ms.
         contadorInterrupcionesReceptores = 0;
         acumuladorReceptorA = 0;
-        //acumuladorReceptorB = 0;
-        //acumuladorReceptorC = 0;
-        //acumuladorReceptorD = 0;
+        acumuladorReceptorB = 0;
+        acumuladorReceptorC = 0;
+        acumuladorReceptorD = 0;
     }
 
-    // sensor A
-    if (EsActivoReceptorA()) {
-        acumuladorReceptorA++;
-    }
-    (acumuladorReceptorA >   1) ? LedAOn() : LedAOff();
-    (acumuladorReceptorA >  46) ? LedBOn() : LedBOff();
-    (acumuladorReceptorA >  92) ? LedCOn() : LedCOff();
-    (acumuladorReceptorA > 184) ? LedDOn() : LedDOff();
+    // sensores
+    if (EsActivoReceptorA()) acumuladorReceptorA++;
+    if (EsActivoReceptorB()) acumuladorReceptorB++;
+    if (EsActivoReceptorC()) acumuladorReceptorC++;
+    if (EsActivoReceptorD()) acumuladorReceptorD++;
     
 }
 
