@@ -14,21 +14,28 @@ extern volatile uint32_t acumuladorReceptorD;
 
 volatile estados estadoActual;
 
-int main () {
+int main() {
     setup();
 
     while (estadoActual == DETENIDO);
+    
+    motoresAvanzar();
     while (1) {
 
-        if (acumuladorReceptorD < 20) {
-            encenderMotores();
-            motoresAvanzar();
-        } else if (acumuladorReceptorD >= 20 && acumuladorReceptorD <= 70) {
-            apagarMotores();
-        } else if (acumuladorReceptorD > 70) {
-            encenderMotores();
-            motoresRetroceder();
+        if (estadoActual == DETENIDO) {
+            apagarTodo();
+        } else {
+            encenderTodo();
         }
+        
+        //if (acumuladorReceptorD < 30) {
+        //    EncenderMotores();
+        //} else { //if (acumuladorReceptorD >= 20 && acumuladorReceptorD <= 70) {
+        //    ApagarMotores();
+        //} else if (acumuladorReceptorD > 70) {
+        //    encenderMotores();
+        //    motoresRetroceder();
+        //}
 
     }
 }
@@ -46,7 +53,7 @@ void setup() {
     sei();
 }
 
-void configurarPulsador(){
+void configurarPulsador() {
     PulsadorInit();
     // Configuro el pin change
     PCICR |= (1 << PCIE0);
@@ -57,16 +64,18 @@ ISR(PCINT0_vect) {
     // Delay para debounce
     // Dado que no tenemos necesidad de hacer nada mientras esperamos por el
     // debounce lo dejamos asi. Sino, deberiamos utilizar algun timer
-    _delay_ms(50);
+    _delay_ms(20);
 
     if (IsPulsadorSet() == true) { 
         // significa que esta en 1 y hubo flanco ascendente genuino
         // se podria reemplazar la variable por poner apagar todo, poner 
         // el micro a dormir esperando solo esta interrupcion y luego
         // despertalo. Aca se lo despertaria
-        //encenderMotores();
-        encenderEmisorSuperior();
-        estadoActual = TRACKING;
+        if (estadoActual == DETENIDO) {
+            estadoActual = TRACKING;
+        } else {
+            estadoActual = DETENIDO;
+        }
     }
 
     // Clear de hardware de la interrupción: de esta manera, si se 
@@ -85,4 +94,18 @@ void bajarPollera() {
         _delay_ms(19);
         aux--;
     }
+}
+
+void apagarTodo() {
+    ApagarMotores();
+    LedAOff();
+    LedBOff();
+    LedCOff();
+    LedDOff();
+    apagarEmisorSuperior();
+}
+
+void encenderTodo() {
+    EncenderMotores();
+    encenderEmisorSuperior();
 }

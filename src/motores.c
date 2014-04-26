@@ -11,7 +11,7 @@ void configurarMotores() {
     SetBit(DDR_MD_IN1, MD_IN1_NUMBER);
     SetBit(DDR_MD_IN2, MD_IN2_NUMBER);
 
-    apagarMotores();
+    ApagarMotores();
 }
 
 void motoresAvanzar() {

@@ -62,13 +62,11 @@
 
 
 /* Macros */
-#define apagarMotores() {ClearBit(PORT_MD_EN, MD_EN_NUMBER);ClearBit(PORT_MI_EN, MI_EN_NUMBER);}
-#define encenderMotores() {SetBit(PORT_MD_EN, MD_EN_NUMBER);  SetBit(PORT_MI_EN, MI_EN_NUMBER);}
+#define ApagarMotores() {ClearBit(PORT_MD_EN, MD_EN_NUMBER);ClearBit(PORT_MI_EN, MI_EN_NUMBER);}
+#define EncenderMotores() {SetBit(PORT_MD_EN, MD_EN_NUMBER);  SetBit(PORT_MI_EN, MI_EN_NUMBER);}
 
 /*-----------------------------------------------*/
 
-void motoresApagar();
-void motoresEncender();
 void configurarMotores();
 
 void motoresAvanzar();

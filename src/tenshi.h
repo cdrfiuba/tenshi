@@ -100,5 +100,7 @@ typedef enum {
 void setup();
 void configurarPulsador();
 void bajarPollera();
+void apagarTodo();
+void encenderTodo();
 
 #endif

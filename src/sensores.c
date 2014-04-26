@@ -61,10 +61,10 @@ ISR(TIMER2_COMPA_vect) {
     if (contadorInterrupcionesReceptores == CANTIDAD_DE_INTERRUPCIONES_EMISORES_RECEPTORES) {
 
         // debug
-        //(acumuladorReceptorD >   1) ? LedAOn() : LedAOff();
-        //(acumuladorReceptorD >  30) ? LedBOn() : LedBOff();
-        //(acumuladorReceptorD >  50) ? LedCOn() : LedCOff();
-        //(acumuladorReceptorD >  80) ? LedDOn() : LedDOff();
+        (acumuladorReceptorD >   1) ? LedAOn() : LedAOff();
+        (acumuladorReceptorD >  30) ? LedBOn() : LedBOff();
+        (acumuladorReceptorD >  50) ? LedCOn() : LedCOff();
+        (acumuladorReceptorD >  80) ? LedDOn() : LedDOff();
         
         // a 200 interrupciones, esto se resetea cada 5,25ms.
         contadorInterrupcionesReceptores = 0;
@@ -86,7 +86,7 @@ void configurarSensoresSuperiores() {
     // Se configura el timer 2 en modo CTC segun las definiciones del .h
 
     TCCR2A = (0 << COM2A1) | (0 << COM2A0) | (0 << COM2B1) | (0 << COM2B0) | (1 << WGM21) | (0 << WGM20);
-    TCCR2B = (0 << WGM22) | TIMER_ON;
+    TCCR2B = (0 << WGM22) | TIMER_OFF;
 
     TCNT2 = 0;
     OCR2A = OCR_EMISOR_TIEMPO_CICLOS;
@@ -109,7 +109,7 @@ void configurarSensoresSuperiores() {
 
     ClearBit(DDR_RD, RD_NUMBER);
     SetBit(PORT_RD, RD_NUMBER);
-
+    
 
     // debug de leds con interrupciones en receptor
     
