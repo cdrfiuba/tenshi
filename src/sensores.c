@@ -34,11 +34,16 @@ typedef enum {
 } t_modosOperacionEmisorSuperior;
 volatile t_modosOperacionEmisorSuperior modoOperacionEmisorSuperior;
 
-volatile uint32_t acumuladorReceptorA = 0;
-volatile uint32_t acumuladorReceptorB = 0;
-volatile uint32_t acumuladorReceptorC = 0;
-volatile uint32_t acumuladorReceptorD = 0;
-volatile uint32_t contadorInterrupcionesReceptores = 0;
+volatile uint8_t acumuladorReceptorA = 0;
+volatile uint8_t acumuladorReceptorB = 0;
+volatile uint8_t acumuladorReceptorC = 0;
+volatile uint8_t acumuladorReceptorD = 0;
+volatile uint8_t contadorInterrupcionesReceptores = 0;
+
+volatile uint8_t acumuladorReceptorA_test = 0;
+volatile uint8_t acumuladorReceptorB_test = 0;
+volatile uint8_t acumuladorReceptorC_test = 0;
+volatile uint8_t acumuladorReceptorD_test = 0;
 
 ISR(TIMER2_COMPA_vect) {
     contadorInterrupcionesEmisorSuperior++;
@@ -61,10 +66,16 @@ ISR(TIMER2_COMPA_vect) {
     if (contadorInterrupcionesReceptores == CANTIDAD_DE_INTERRUPCIONES_EMISORES_RECEPTORES) {
 
         // debug
-        (acumuladorReceptorD >   1) ? LedAOn() : LedAOff();
+ /*       (acumuladorReceptorD >   1) ? LedAOn() : LedAOff();
         (acumuladorReceptorD >  30) ? LedBOn() : LedBOff();
         (acumuladorReceptorD >  50) ? LedCOn() : LedCOff();
         (acumuladorReceptorD >  80) ? LedDOn() : LedDOff();
+ */       
+        // Paso el valor de los acumuladores a las variables que miden efectivamente distancia
+        acumuladorReceptorA_test = acumuladorReceptorA;
+        acumuladorReceptorB_test = acumuladorReceptorB;
+        acumuladorReceptorC_test = acumuladorReceptorC;
+        acumuladorReceptorD_test = acumuladorReceptorD;
         
         // a 200 interrupciones, esto se resetea cada 5,25ms.
         contadorInterrupcionesReceptores = 0;

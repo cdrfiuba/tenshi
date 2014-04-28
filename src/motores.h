@@ -64,16 +64,16 @@
 /* Macros */
 #define ApagarMotores() {ClearBit(PORT_MD_EN, MD_EN_NUMBER);ClearBit(PORT_MI_EN, MI_EN_NUMBER);}
 #define EncenderMotores() {SetBit(PORT_MD_EN, MD_EN_NUMBER);  SetBit(PORT_MI_EN, MI_EN_NUMBER);}
-
 /*-----------------------------------------------*/
 
 void configurarMotores();
 
 void motoresAvanzar();
 void motoresRetroceder();
-void motoresGirarIzquierda();
 void motoresGirarDerecha();
-
+void motoresGirarIzquierda();
+void motoresGirarQuietoDerecha();
+void motoresGirarQuietoIzquierda();
 void configurarMotorPolleras();
 
 #endif

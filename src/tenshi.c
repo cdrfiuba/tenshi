@@ -7,15 +7,82 @@
 #include "tenshi.h"
 
 // sensores
-extern volatile uint32_t acumuladorReceptorA;
-extern volatile uint32_t acumuladorReceptorB;
-extern volatile uint32_t acumuladorReceptorC;
-extern volatile uint32_t acumuladorReceptorD;
+
+extern volatile uint8_t acumuladorReceptorA_test;
+extern volatile uint8_t acumuladorReceptorB_test;
+extern volatile uint8_t acumuladorReceptorC_test;
+extern volatile uint8_t acumuladorReceptorD_test;
 
 volatile estados estadoActual;
 
+#define MAXIMO_PERMITIDO 90
+#define MINIMO_PERMITIDO 10
+#define DISTANCIA_RELEVANTE 15
+#define DISTANCIA_EXCESIVA 30
+
+typedef enum{
+ESPERAR=0,
+SEGUIR=1
+}modo_t;
+
+/*#define avanzarDerecho() motoresAvanzar()
+#define girarAvanzandoDerecha() motoresGirarDerecha()
+#define girarAvanzandoIzquierda() motoresGirarIzquierda()
+#define girarQuietoDerecha() motoresGirarQuietoDerecha()
+#define girarQuietoIzquierda() motoresGirarQuietoIzquierda()
+*/
+
+#define avanzarDerecho() {LedAOn();LedBOn();LedCOn();LedDOn();} // Si va a avanzar derecho, prende todos los leds. Si tiene que girar, prende los leds de el lado para el cual doblar.
+#define girarAvanzandoDerecha() {LedAOff();LedBOn();LedCOff();LedDOn();}
+#define girarAvanzandoIzquierda() {LedAOn();LedBOff();LedCOn();LedDOff();}
+#define girarQuietoDerecha() {LedAOff();LedBOn();LedCOff();LedDOff();}
+#define girarQuietoIzquierda() {LedAOn();LedBOff();LedCOff();LedDOff();}
+
 int main() {
     setup();
+    encenderTodo();
+
+// Codigo de seguimiento
+//
+// El objetivo del código es 
+
+    modo_t modo;
+    uint8_t distanciaMaxima, distanciaMinima;
+
+    while(1){
+        distanciaMaxima = max(acumuladorReceptorA_test, acumuladorReceptorB_test);
+        distanciaMinima = min(acumuladorReceptorA_test, acumuladorReceptorB_test);
+
+        if( distanciaMaxima > MAXIMO_PERMITIDO || distanciaMinima < MINIMO_PERMITIDO)
+            modo = SEGUIR;
+        else
+            modo = ESPERAR;
+
+        switch (modo){
+            case ESPERAR: 
+                break;
+            case SEGUIR:
+                if ((distanciaMaxima - distanciaMinima) < DISTANCIA_RELEVANTE){
+                    avanzarDerecho();
+                }else if ((distanciaMaxima - distanciaMinima) < DISTANCIA_EXCESIVA) {
+                    if (acumuladorReceptorA_test < acumuladorReceptorB_test){
+                        girarAvanzandoDerecha();
+                    }else{
+                        girarAvanzandoIzquierda();
+                    }
+                }else { 
+                    if (acumuladorReceptorA_test < acumuladorReceptorB_test){
+                        girarQuietoDerecha();
+                    }else{
+                        girarQuietoIzquierda();
+                    }
+                }
+        }
+    }
+
+// 
+// Fin de codigo de seguimiento
+
 
     while (estadoActual == DETENIDO);
     
@@ -39,6 +106,7 @@ int main() {
 
     }
 }
+
 
 void setup() {
     LedDInit(); 
