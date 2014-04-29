@@ -40,10 +40,10 @@ volatile uint8_t acumuladorReceptorC = 0;
 volatile uint8_t acumuladorReceptorD = 0;
 volatile uint8_t contadorInterrupcionesReceptores = 0;
 
-volatile uint8_t acumuladorReceptorA_test = 0;
-volatile uint8_t acumuladorReceptorB_test = 0;
-volatile uint8_t acumuladorReceptorC_test = 0;
-volatile uint8_t acumuladorReceptorD_test = 0;
+volatile uint8_t valorReceptorA = 0;
+volatile uint8_t valorReceptorB = 0;
+volatile uint8_t valorReceptorC = 0;
+volatile uint8_t valorReceptorD = 0;
 
 ISR(TIMER2_COMPA_vect) {
     contadorInterrupcionesEmisorSuperior++;
@@ -66,16 +66,16 @@ ISR(TIMER2_COMPA_vect) {
     if (contadorInterrupcionesReceptores == CANTIDAD_DE_INTERRUPCIONES_EMISORES_RECEPTORES) {
 
         // debug
- /*       (acumuladorReceptorD >   1) ? LedAOn() : LedAOff();
-        (acumuladorReceptorD >  30) ? LedBOn() : LedBOff();
-        (acumuladorReceptorD >  50) ? LedCOn() : LedCOff();
-        (acumuladorReceptorD >  80) ? LedDOn() : LedDOff();
- */       
+        (acumuladorReceptorB >   1) ? LedAOn() : LedAOff();
+        (acumuladorReceptorB >  30) ? LedBOn() : LedBOff();
+        (acumuladorReceptorB >  60) ? LedCOn() : LedCOff();
+        (acumuladorReceptorB >  90) ? LedDOn() : LedDOff();
+       
         // Paso el valor de los acumuladores a las variables que miden efectivamente distancia
-        acumuladorReceptorA_test = acumuladorReceptorA;
-        acumuladorReceptorB_test = acumuladorReceptorB;
-        acumuladorReceptorC_test = acumuladorReceptorC;
-        acumuladorReceptorD_test = acumuladorReceptorD;
+        valorReceptorA = acumuladorReceptorA;
+        valorReceptorB = acumuladorReceptorB;
+        valorReceptorC = acumuladorReceptorC;
+        valorReceptorD = acumuladorReceptorD;
         
         // a 200 interrupciones, esto se resetea cada 5,25ms.
         contadorInterrupcionesReceptores = 0;

@@ -53,7 +53,7 @@
 // Como usamos el timer del emisor, contar 200 interrupciones implica
 // contar 5,25 ms. Contamos en los posibles flancos altos del emisor, y en 
 // el mismo intervalo durante el modo cero.
-#define CANTIDAD_DE_INTERRUPCIONES_EMISORES_RECEPTORES         200 // deberia ser (N*2*CANTIDAD_DE_INTERRUPCIONES_EMISORES_SUPERIORES), de manera que sea un numero entero de ciclos completos de la interrupcion. dado que es 23 en este momento la cantidad de interrupciones, yo usaria N=4 o 5, dando esta cuenta 184 o 230, dependiendo cual se elija).
+#define CANTIDAD_DE_INTERRUPCIONES_EMISORES_RECEPTORES         184 // deberia ser (N*2*CANTIDAD_DE_INTERRUPCIONES_EMISORES_SUPERIORES), de manera que sea un numero entero de ciclos completos de la interrupcion. dado que es 23 en este momento la cantidad de interrupciones, yo usaria N=4 o 5, dando esta cuenta 184 o 230, dependiendo cual se elija).
 
 #define TIMER_ON       (0 << CS22) | (0 << CS21) | (1 << CS20)
 #define TIMER_OFF      (0 << CS22) | (0 << CS21) | (0 << CS20)

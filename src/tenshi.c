@@ -8,22 +8,22 @@
 
 // sensores
 
-extern volatile uint8_t acumuladorReceptorA_test;
-extern volatile uint8_t acumuladorReceptorB_test;
-extern volatile uint8_t acumuladorReceptorC_test;
-extern volatile uint8_t acumuladorReceptorD_test;
+extern volatile uint8_t valorReceptorA;
+extern volatile uint8_t valorReceptorB;
+extern volatile uint8_t valorReceptorC;
+extern volatile uint8_t valorReceptorD;
 
 volatile estados estadoActual;
 
 #define MAXIMO_PERMITIDO 90
-#define MINIMO_PERMITIDO 10
-#define DISTANCIA_RELEVANTE 15
-#define DISTANCIA_EXCESIVA 30
+#define MINIMO_PERMITIDO 1
+#define DIFERENCIA_RELEVANTE 5
+#define DIFERENCIA_EXCESIVA 50
 
-typedef enum{
-ESPERAR=0,
-SEGUIR=1
-}modo_t;
+typedef enum {
+    ESPERAR,
+    SEGUIR
+} modo_t;
 
 /*#define avanzarDerecho() motoresAvanzar()
 #define girarAvanzandoDerecha() motoresGirarDerecha()
@@ -32,51 +32,59 @@ SEGUIR=1
 #define girarQuietoIzquierda() motoresGirarQuietoIzquierda()
 */
 
-#define avanzarDerecho() {LedAOn();LedBOn();LedCOn();LedDOn();} // Si va a avanzar derecho, prende todos los leds. Si tiene que girar, prende los leds de el lado para el cual doblar.
-#define girarAvanzandoDerecha() {LedAOff();LedBOn();LedCOff();LedDOn();}
-#define girarAvanzandoIzquierda() {LedAOn();LedBOff();LedCOn();LedDOff();}
-#define girarQuietoDerecha() {LedAOff();LedBOn();LedCOff();LedDOff();}
-#define girarQuietoIzquierda() {LedAOn();LedBOff();LedCOff();LedDOff();}
+// Si va a avanzar derecho, prende todos los leds. Si tiene que girar, prende los leds de el lado para el cual doblar.
+#define LedsModoAvanzarDerecho()          LedAOn();  LedBOn();  LedCOn();  LedDOn(); 
+
+#define LedsModoGirarAvanzandoDerecha()   LedAOff(); LedBOn();  LedCOff(); LedDOn();
+#define LedsModoGirarAvanzandoIzquierda() LedAOn();  LedBOff(); LedCOn();  LedDOff();
+
+#define LedsModoGirarQuietoDerecha()      LedAOff(); LedBOn();  LedCOff(); LedDOff();
+#define LedsModoGirarQuietoIzquierda()    LedAOn();  LedBOff(); LedCOff(); LedDOff();
+
+#define LedsModoEsperar()                 LedAOff();  LedBOff(); LedCOff(); LedDOff();
 
 int main() {
     setup();
     encenderTodo();
+    while (estadoActual == DETENIDO);
+    
 
 // Codigo de seguimiento
 //
 // El objetivo del código es 
 
     modo_t modo;
-    uint8_t distanciaMaxima, distanciaMinima;
+    uint8_t diferenciaValores;
+    while (1) {
+        diferenciaValores = max(valorReceptorA, valorReceptorB) - min(valorReceptorA, valorReceptorB);
 
-    while(1){
-        distanciaMaxima = max(acumuladorReceptorA_test, acumuladorReceptorB_test);
-        distanciaMinima = min(acumuladorReceptorA_test, acumuladorReceptorB_test);
-
-        if( distanciaMaxima > MAXIMO_PERMITIDO || distanciaMinima < MINIMO_PERMITIDO)
+        if ((valorReceptorA > MINIMO_PERMITIDO && valorReceptorA < MAXIMO_PERMITIDO) || (valorReceptorB > MINIMO_PERMITIDO && valorReceptorB < MAXIMO_PERMITIDO)) {
             modo = SEGUIR;
-        else
+        } else { 
             modo = ESPERAR;
+        }
 
-        switch (modo){
-            case ESPERAR: 
+        switch (modo) {
+            case ESPERAR:
+                LedsModoEsperar(); 
                 break;
             case SEGUIR:
-                if ((distanciaMaxima - distanciaMinima) < DISTANCIA_RELEVANTE){
-                    avanzarDerecho();
-                }else if ((distanciaMaxima - distanciaMinima) < DISTANCIA_EXCESIVA) {
-                    if (acumuladorReceptorA_test < acumuladorReceptorB_test){
-                        girarAvanzandoDerecha();
-                    }else{
-                        girarAvanzandoIzquierda();
+                if (diferenciaValores < DIFERENCIA_RELEVANTE) {
+                    LedsModoAvanzarDerecho();
+                } else if (diferenciaValores < DIFERENCIA_EXCESIVA) {
+                    if (valorReceptorA < valorReceptorB) {
+                        LedsModoGirarAvanzandoDerecha();
+                    } else {
+                        LedsModoGirarAvanzandoIzquierda();
                     }
-                }else { 
-                    if (acumuladorReceptorA_test < acumuladorReceptorB_test){
-                        girarQuietoDerecha();
-                    }else{
-                        girarQuietoIzquierda();
+                } else { 
+                    if (valorReceptorA < valorReceptorB) {
+                        LedsModoGirarQuietoDerecha();
+                    } else {
+                        LedsModoGirarQuietoIzquierda();
                     }
                 }
+                break;
         }
     }
 

@@ -23,32 +23,32 @@ void configurarMotores() {
 #define MotorDerechoRetroceder()        {SetBit(PORT_MD_IN1, MD_IN1_NUMBER); ClearBit(PORT_MD_IN2, MD_IN2_NUMBER);}
 #define MotorIzquierdoRetroceder()      {SetBit(PORT_MI_IN1, MI_IN1_NUMBER); ClearBit(PORT_MI_IN2, MI_IN2_NUMBER);}
 
-void motoresAvanzar(void) {
+inline void motoresAvanzar() {
     MotorDerechoAvanzar();
     MotorIzquierdoAvanzar();
 }
 
-void motoresRetroceder(void) {
+inline void motoresRetroceder() {
     MotorDerechoRetroceder();
     MotorIzquierdoRetroceder();
 }
 
-void motoresGirarQuietoDerecha(void) {
+inline void motoresGirarQuietoDerecha() {
     MotorDerechoRetroceder();
     MotorIzquierdoAvanzar();    
 }
 
-void motoresGirarQuietoIzquierda(void) {
+inline void motoresGirarQuietoIzquierda() {
     MotorDerechoAvanzar();
     MotorIzquierdoRetroceder();
 }
 
-void motoresGirarDerecha(void) {
+inline void motoresGirarDerecha() {
     MotorDerechoFrenarLibre();
     MotorIzquierdoAvanzar();
 }
 
-void motoresGirarIzquierda(void) {
+inline void motoresGirarIzquierda() {
     MotorDerechoAvanzar();
     MotorIzquierdoFrenarLibre();
 }

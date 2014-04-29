@@ -26,8 +26,8 @@
 #define PORT_MI_IN1_NAME  C
 #define MI_IN1_NUMBER     4
 /*MI_IN2 = Motor Izquierdo IN2*/
-#define PORT_MI_IN2_NAME     C
-#define MI_IN2_NUMBER           5
+#define PORT_MI_IN2_NAME  C
+#define MI_IN2_NUMBER     5
 
 /*MD_IN1 = Motor Derecho IN1*/
 #define PORT_MD_IN1_NAME  D
