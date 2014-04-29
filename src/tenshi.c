@@ -15,9 +15,9 @@ extern volatile uint8_t valorReceptorD;
 
 volatile estados estadoActual;
 
-#define MAXIMO_PERMITIDO 90
-#define MINIMO_PERMITIDO 1
-#define DIFERENCIA_RELEVANTE 5
+#define MAXIMO_PERMITIDO 150
+#define MINIMO_PERMITIDO 70
+#define DIFERENCIA_RELEVANTE 20
 #define DIFERENCIA_EXCESIVA 50
 
 typedef enum {
@@ -38,7 +38,7 @@ typedef enum {
 #define LedsModoGirarAvanzandoDerecha()   LedAOff(); LedBOn();  LedCOff(); LedDOn();
 #define LedsModoGirarAvanzandoIzquierda() LedAOn();  LedBOff(); LedCOn();  LedDOff();
 
-#define LedsModoGirarQuietoDerecha()      LedAOff(); LedBOn();  LedCOff(); LedDOff();
+#define LedsModoGirarQuietoDerecha()      LedAOff (); LedBOn();  LedCOff(); LedDOff();
 #define LedsModoGirarQuietoIzquierda()    LedAOn();  LedBOff(); LedCOff(); LedDOff();
 
 #define LedsModoEsperar()                 LedAOff();  LedBOff(); LedCOff(); LedDOff();
@@ -46,7 +46,7 @@ typedef enum {
 int main() {
     setup();
     encenderTodo();
-    while (estadoActual == DETENIDO);
+//    while (estadoActual == DETENIDO);
     
 
 // Codigo de seguimiento
@@ -56,6 +56,7 @@ int main() {
     modo_t modo;
     uint8_t diferenciaValores;
     while (1) {
+        motoresAvanzar();
         diferenciaValores = max(valorReceptorA, valorReceptorB) - min(valorReceptorA, valorReceptorB);
 
         if ((valorReceptorA > MINIMO_PERMITIDO && valorReceptorA < MAXIMO_PERMITIDO) || (valorReceptorB > MINIMO_PERMITIDO && valorReceptorB < MAXIMO_PERMITIDO)) {
@@ -64,6 +65,19 @@ int main() {
             modo = ESPERAR;
         }
 
+/*        if (modo == SEGUIR){
+            LedAOn();  
+            LedBOn(); 
+            LedCOff(); 
+            LedDOff();
+        }
+        else {
+            LedAOff();  
+            LedBOff(); 
+            LedCOn(); 
+            LedDOn();        
+        }
+*/
         switch (modo) {
             case ESPERAR:
                 LedsModoEsperar(); 
@@ -71,12 +85,12 @@ int main() {
             case SEGUIR:
                 if (diferenciaValores < DIFERENCIA_RELEVANTE) {
                     LedsModoAvanzarDerecho();
-                } else if (diferenciaValores < DIFERENCIA_EXCESIVA) {
+                /*} else if (diferenciaValores < DIFERENCIA_EXCESIVA) {
                     if (valorReceptorA < valorReceptorB) {
                         LedsModoGirarAvanzandoDerecha();
                     } else {
                         LedsModoGirarAvanzandoIzquierda();
-                    }
+                    }*/
                 } else { 
                     if (valorReceptorA < valorReceptorB) {
                         LedsModoGirarQuietoDerecha();

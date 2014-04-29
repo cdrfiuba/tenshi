@@ -65,12 +65,12 @@ ISR(TIMER2_COMPA_vect) {
     contadorInterrupcionesReceptores++;
     if (contadorInterrupcionesReceptores == CANTIDAD_DE_INTERRUPCIONES_EMISORES_RECEPTORES) {
 
-        // debug
-        (acumuladorReceptorB >   1) ? LedAOn() : LedAOff();
-        (acumuladorReceptorB >  30) ? LedBOn() : LedBOff();
-        (acumuladorReceptorB >  60) ? LedCOn() : LedCOff();
+ /*       // debug
+        (acumuladorReceptorB >  80) ? LedAOn() : LedAOff();
+        (acumuladorReceptorB >  83) ? LedBOn() : LedBOff();
+        (acumuladorReceptorB >  86) ? LedCOn() : LedCOff();
         (acumuladorReceptorB >  90) ? LedDOn() : LedDOff();
-       
+  */     
         // Paso el valor de los acumuladores a las variables que miden efectivamente distancia
         valorReceptorA = acumuladorReceptorA;
         valorReceptorB = acumuladorReceptorB;
