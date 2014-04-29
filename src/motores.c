@@ -14,14 +14,14 @@ void configurarMotores() {
     ApagarMotores();
 }
 
-#define MotorDerechoAvanzar()           {ClearBit(PORT_MD_IN1, MD_IN1_NUMBER); SetBit(PORT_MD_IN2, MD_IN2_NUMBER);}
-#define MotorIzquierdoAvanzar()         {ClearBit(PORT_MI_IN1, MI_IN1_NUMBER); SetBit(PORT_MI_IN2, MI_IN2_NUMBER);}
-#define MotorDerechoFrenarTrabado()     {SetBit(PORT_MD_IN1, MD_IN1_NUMBER); SetBit(PORT_MD_IN2, MD_IN2_NUMBER);}
-#define MotorIzquierdoFrenarTrabado()   {SetBit(PORT_MI_IN1, MI_IN1_NUMBER); SetBit(PORT_MI_IN2, MI_IN2_NUMBER);}
+#define MotorDerechoAvanzar()           {ClearBit(PORT_MD_IN1, MD_IN1_NUMBER);   SetBit(PORT_MD_IN2, MD_IN2_NUMBER);}
+#define MotorIzquierdoAvanzar()         {ClearBit(PORT_MI_IN1, MI_IN1_NUMBER);   SetBit(PORT_MI_IN2, MI_IN2_NUMBER);}
+#define MotorDerechoFrenarTrabado()     {  SetBit(PORT_MD_IN1, MD_IN1_NUMBER);   SetBit(PORT_MD_IN2, MD_IN2_NUMBER);}
+#define MotorIzquierdoFrenarTrabado()   {  SetBit(PORT_MI_IN1, MI_IN1_NUMBER);   SetBit(PORT_MI_IN2, MI_IN2_NUMBER);}
 #define MotorDerechoFrenarLibre()       {ClearBit(PORT_MD_IN1, MD_IN1_NUMBER); ClearBit(PORT_MD_IN2, MD_IN2_NUMBER);}
 #define MotorIzquierdoFrenarLibre()     {ClearBit(PORT_MI_IN1, MI_IN1_NUMBER); ClearBit(PORT_MI_IN2, MI_IN2_NUMBER);}
-#define MotorDerechoRetroceder()        {SetBit(PORT_MD_IN1, MD_IN1_NUMBER); ClearBit(PORT_MD_IN2, MD_IN2_NUMBER);}
-#define MotorIzquierdoRetroceder()      {SetBit(PORT_MI_IN1, MI_IN1_NUMBER); ClearBit(PORT_MI_IN2, MI_IN2_NUMBER);}
+#define MotorDerechoRetroceder()        {  SetBit(PORT_MD_IN1, MD_IN1_NUMBER); ClearBit(PORT_MD_IN2, MD_IN2_NUMBER);}
+#define MotorIzquierdoRetroceder()      {  SetBit(PORT_MI_IN1, MI_IN1_NUMBER); ClearBit(PORT_MI_IN2, MI_IN2_NUMBER);}
 
 inline void motoresAvanzar() {
     MotorDerechoAvanzar();

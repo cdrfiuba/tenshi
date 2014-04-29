@@ -84,7 +84,7 @@
 /* Macros */
 // Se setea como entrada y se pone el pin en '1'. Esto último hace que se 
 // active el pull-up interno
-#define PulsadorInit()  ClearBit(DDR_PULSADOR, PULSADOR_NUMBER); SetBit(PORT_PULSADOR, PULSADOR_NUMBER);
+#define PulsadorInit()    ClearBit(DDR_PULSADOR, PULSADOR_NUMBER); SetBit(PORT_PULSADOR, PULSADOR_NUMBER);
 
 // lee el pin del boton de arranque
 #define IsPulsadorSet()   IsBitSet(PIN_PULSADOR, PULSADOR_NUMBER)
