@@ -70,10 +70,16 @@ void configurarMotores();
 
 void motoresAvanzar();
 void motoresRetroceder();
-void motoresGirarDerecha();
-void motoresGirarIzquierda();
+
 void motoresGirarQuietoDerecha();
 void motoresGirarQuietoIzquierda();
+
+void motoresAvanzarYGirarDerecha();
+void motoresAvanzarYGirarIzquierda();
+
+void motoresRetrocederYGirarDerecha();
+void motoresRetrocederYGirarIzquierda();
+
 void configurarMotorPolleras();
 
 #endif

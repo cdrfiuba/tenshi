@@ -13,96 +13,129 @@ extern volatile uint8_t valorReceptorB;
 extern volatile uint8_t valorReceptorC;
 extern volatile uint8_t valorReceptorD;
 
-volatile estados estadoActual;
 volatile uint8_t esNecesarioCheckearBoton = 0;
 
-#define MAXIMO_PERMITIDO      150
-#define MINIMO_PERMITIDO       70
-#define DIFERENCIA_RELEVANTE   20
-#define DIFERENCIA_EXCESIVA    50
-
-typedef enum {
-    ESPERAR,
-    SEGUIR
-} modo_t;
-
-#define AvanzarAdelante()         motoresAvanzar()
-#define GirarAvanzandoDerecha( )  motoresGirarDerecha()
-#define GirarAvanzandoIzquierda() motoresGirarIzquierda()
-#define GirarQuietoDerecha()      motoresGirarQuietoDerecha()
-#define GirarQuietoIzquierda()    motoresGirarQuietoIzquierda()
-
-
-// Si va a avanzar derecho, prende todos los leds. Si tiene que girar, prende los leds de el lado para el cual doblar.
-#define LedsModoAvanzarAdelante()         LedAOn();  LedBOn();  LedCOn();  LedDOn(); 
-
-#define LedsModoGirarAvanzandoDerecha()   LedAOff(); LedBOn();  LedCOff(); LedDOn();
-#define LedsModoGirarAvanzandoIzquierda() LedAOn();  LedBOff(); LedCOn();  LedDOff();
-
-#define LedsModoGirarQuietoDerecha()      LedAOff(); LedBOn();  LedCOff(); LedDOff();
-#define LedsModoGirarQuietoIzquierda()    LedAOn();  LedBOff(); LedCOff(); LedDOff();
-
-#define LedsModoEsperar()                 LedAOff(); LedBOff(); LedCOff(); LedDOff();
-
 int main() {
-    modo_t modo;
-    uint8_t diferenciaValores;
+    estado_activacion_t estadoActivacion = APAGADO;
+    uint8_t modoAccionNuevo = GIRANDO;
+    uint8_t modoAccion = GIRANDO;
+    uint8_t diferenciaValoresAB;
+    uint8_t diferenciaValoresCD;
 
     setup();
     
     while (1) {
-        if (estadoActual == TRACKING) {
+        if (estadoActivacion == PRENDIDO) {
+
+            // sensado
+            modoAccionNuevo = 0;
             
-            diferenciaValores = max(valorReceptorA, valorReceptorB) - min(valorReceptorA, valorReceptorB);
-
             if ((valorReceptorA > MINIMO_PERMITIDO && valorReceptorA < MAXIMO_PERMITIDO) || (valorReceptorB > MINIMO_PERMITIDO && valorReceptorB < MAXIMO_PERMITIDO)) {
-                modo = SEGUIR;
-            } else { 
-                modo = ESPERAR;
-            }
+				diferenciaValoresAB = max(valorReceptorA, valorReceptorB) - min(valorReceptorA, valorReceptorB);
+				if (diferenciaValoresAB < DIFERENCIA_RELEVANTE) {
+					modoAccionNuevo |= ATACANDO_ADELANTE;
+				} else if (valorReceptorA < valorReceptorB) {
+					modoAccionNuevo |= ATACANDO_ADELANTE_DERECHA;
+				} else {
+					modoAccionNuevo |= ATACANDO_ADELANTE_IZQUIERDA;
+				}
+			}
+            
+            if ((valorReceptorC > MINIMO_PERMITIDO && valorReceptorC < MAXIMO_PERMITIDO) || (valorReceptorD > MINIMO_PERMITIDO && valorReceptorD < MAXIMO_PERMITIDO)) {
+				diferenciaValoresCD = max(valorReceptorC, valorReceptorD) - min(valorReceptorC, valorReceptorD);
+				if (diferenciaValoresCD < DIFERENCIA_RELEVANTE) {
+					modoAccionNuevo |= ATACANDO_ATRAS;
+				} else if (valorReceptorC < valorReceptorD) {
+					modoAccionNuevo |= ATACANDO_ATRAS_DERECHA;
+				} else {
+					modoAccionNuevo |= ATACANDO_ATRAS_IZQUIERDA;
+				}
+			}
 
-            switch (modo) {
-                case ESPERAR:
-                    ApagarMotores();
-                    LedsModoEsperar(); 
-                    break;
-                case SEGUIR:
-                    EncenderMotores();
-                    if (diferenciaValores < DIFERENCIA_RELEVANTE) {
-                        LedsModoAvanzarAdelante();
-                        motoresAvanzar();
-                    /*} else if (diferenciaValores < DIFERENCIA_EXCESIVA) {
-                        if (valorReceptorA < valorReceptorB) {
-                            LedsModoGirarAvanzandoDerecha();
-                        } else {
-                            LedsModoGirarAvanzandoIzquierda();
-                        }*/
-                    } else { 
-                        if (valorReceptorA < valorReceptorB) {
-                            //LedsModoGirarQuietoDerecha();
-                            LedsModoGirarAvanzandoDerecha();
-                            motoresGirarDerecha();
-                        } else {
-                            //LedsModoGirarQuietoIzquierda();
-                            LedsModoGirarAvanzandoIzquierda();
-                            motoresGirarIzquierda();
-                        }
-                    }
-                    break;
+            if (modoAccionNuevo != modoAccion) {
+                // cambio motores
+				switch (modoAccionNuevo) {
+					case ATACANDO_ADELANTE:
+						motoresAvanzar();
+						break;
+					case ATACANDO_ADELANTE_DERECHA:
+						motoresAvanzarYGirarDerecha();
+						break;
+					case ATACANDO_ADELANTE_IZQUIERDA:
+						motoresAvanzarYGirarIzquierda();
+						break;
+					case ATACANDO_ATRAS:
+						motoresRetroceder();
+						break;
+					case ATACANDO_ATRAS_DERECHA:
+						motoresRetrocederYGirarDerecha();
+						break;
+					case ATACANDO_ATRAS_IZQUIERDA:
+						motoresRetrocederYGirarIzquierda();
+						break;
+					case GIRANDO:
+					default:
+						motoresGirarQuietoDerecha();
+						break;
+				}
+                // cambiar estado
+                modoAccion = modoAccionNuevo;
+                
             }
+            
+            //diferenciaValores = max(valorReceptorA, valorReceptorB) - min(valorReceptorA, valorReceptorB);
+
+            //if ((valorReceptorA > MINIMO_PERMITIDO && valorReceptorA < MAXIMO_PERMITIDO) || (valorReceptorB > MINIMO_PERMITIDO && valorReceptorB < MAXIMO_PERMITIDO)) {
+                //modo = SEGUIR;
+            //} else { 
+                //modo = ESPERAR;
+            //}
+
+            //switch (modo) {
+                //case ESPERAR:
+                    //ApagarMotores();
+                    //LedsModoEsperar(); 
+                    //break;
+                //case SEGUIR:
+                    //EncenderMotores();
+                    //if (diferenciaValores < DIFERENCIA_RELEVANTE) {
+                        //LedsModoAvanzarAdelante();
+                        //motoresAvanzar();
+                    // /*} else if (diferenciaValores < DIFERENCIA_EXCESIVA) {
+                        //if (valorReceptorA < valorReceptorB) {
+                            //LedsModoGirarAvanzandoDerecha();
+                        //} else {
+                            //LedsModoGirarAvanzandoIzquierda();
+                        //}*/
+                    //} else { 
+                        //if (valorReceptorA < valorReceptorB) {
+                            ////LedsModoGirarQuietoDerecha();
+                            //LedsModoGirarAvanzandoDerecha();
+                            //motoresGirarDerecha();
+                        //} else {
+                            ////LedsModoGirarQuietoIzquierda();
+                            //LedsModoGirarAvanzandoIzquierda();
+                            //motoresGirarIzquierda();
+                        //}
+                    //}
+                    //break;
+            //}
             
         }
         
+        
+        // cambia entre los estados PRENDIDO y APAGADO si se apretó el botón
         if (esNecesarioCheckearBoton == 1) {
             ClearBit(PCMSK0, PCINT0); // desactiva interrupción botón
             if (IsPulsadorSet() == true) {
                 _delay_ms(50);
                 if (IsPulsadorSet() == true) {
-                    if (estadoActual == DETENIDO) {
-                        estadoActual = TRACKING;
+                    if (estadoActivacion == APAGADO) {
+                        //_delay_ms(5000); // para competir hay que esperar 5 segundos
+                        estadoActivacion = PRENDIDO;
                         encenderTodo();
                     } else {
-                        estadoActual = DETENIDO;
+                        estadoActivacion = APAGADO;
                         apagarTodo();
                     }
                 }
@@ -125,8 +158,6 @@ void setup() {
     configurarMotores();
     configurarSensoresSuperiores();
     configurarMotorPolleras();
-    
-    estadoActual = DETENIDO;
     
     sei();
 }

@@ -27,7 +27,6 @@ inline void motoresAvanzar() {
     MotorDerechoAvanzar();
     MotorIzquierdoAvanzar();
 }
-
 inline void motoresRetroceder() {
     MotorDerechoRetroceder();
     MotorIzquierdoRetroceder();
@@ -37,19 +36,26 @@ inline void motoresGirarQuietoDerecha() {
     MotorDerechoRetroceder();
     MotorIzquierdoAvanzar();    
 }
-
 inline void motoresGirarQuietoIzquierda() {
     MotorDerechoAvanzar();
     MotorIzquierdoRetroceder();
 }
 
-inline void motoresGirarDerecha() {
+inline void motoresAvanzarYGirarDerecha() {
     MotorDerechoFrenarLibre();
     MotorIzquierdoAvanzar();
 }
-
-inline void motoresGirarIzquierda() {
+inline void motoresAvanzarYGirarIzquierda() {
     MotorDerechoAvanzar();
+    MotorIzquierdoFrenarLibre();
+}
+
+inline void motoresRetrocederYGirarDerecha() {
+    MotorDerechoFrenarLibre();
+    MotorIzquierdoRetroceder();
+}
+inline void motoresRetrocederYGirarIzquierda() {
+    MotorDerechoRetroceder();
     MotorIzquierdoFrenarLibre();
 }
 
