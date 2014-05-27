@@ -107,15 +107,23 @@ typedef enum {
 
 
 // Si va a avanzar derecho, prende todos los leds. Si tiene que girar, prende los leds de el lado para el cual doblar.
-#define LedsModoAvanzarAdelante()         LedAOn();  LedBOn();  LedCOn();  LedDOn(); 
+#define LedsAvanzar()                    LedAOn();  LedBOn();  LedCOff(); LedDOff(); 
 
-#define LedsModoGirarAvanzandoDerecha()   LedAOff(); LedBOn();  LedCOff(); LedDOn();
-#define LedsModoGirarAvanzandoIzquierda() LedAOn();  LedBOff(); LedCOn();  LedDOff();
+#define LedsAvanzarYGirarDerecha()       LedAOff(); LedBOn();  LedCOff(); LedDOff();
+#define LedsAvanzarYGirarIzquierda()     LedAOn();  LedBOff(); LedCOff(); LedDOff();
 
-#define LedsModoGirarQuietoDerecha()      LedAOff(); LedBOn();  LedCOff(); LedDOff();
-#define LedsModoGirarQuietoIzquierda()    LedAOn();  LedBOff(); LedCOff(); LedDOff();
+#define LedsGirarQuietoDerecha()         LedAOff(); LedBOn();  LedCOn();  LedDOff();
+#define LedsGirarQuietoIzquierda()       LedAOn();  LedBOff(); LedCOff(); LedDOn();
 
-#define LedsModoEsperar()                 LedAOff(); LedBOff(); LedCOff(); LedDOff();
+#define LedsEsperar()                    LedAOff(); LedBOff(); LedCOff(); LedDOff();
+
+#define LedsRetroceder()                 LedAOff(); LedBOff(); LedCOn();  LedDOn();
+#define LedsRetrocederYGirarDerecha()    LedAOff(); LedBOff(); LedCOn();  LedDOff();
+#define LedsRetrocederYGirarIzquierda()  LedAOff(); LedBOff(); LedCOff(); LedDOn();
+
+
+
+
 
 typedef enum {
     PRENDIDO,

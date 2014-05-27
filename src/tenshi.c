@@ -57,25 +57,32 @@ int main() {
 				switch (modoAccionNuevo) {
 					case ATACANDO_ADELANTE:
 						motoresAvanzar();
+						LedsAvanzar();
 						break;
 					case ATACANDO_ADELANTE_DERECHA:
 						motoresAvanzarYGirarDerecha();
+						LedsAvanzarYGirarDerecha();
 						break;
 					case ATACANDO_ADELANTE_IZQUIERDA:
 						motoresAvanzarYGirarIzquierda();
+						LedsAvanzarYGirarIzquierda();
 						break;
 					case ATACANDO_ATRAS:
 						motoresRetroceder();
+						LedsRetroceder();
 						break;
 					case ATACANDO_ATRAS_DERECHA:
 						motoresRetrocederYGirarDerecha();
+						LedsRetrocederYGirarDerecha();
 						break;
 					case ATACANDO_ATRAS_IZQUIERDA:
 						motoresRetrocederYGirarIzquierda();
+						LedsRetrocederYGirarIzquierda();
 						break;
 					case GIRANDO:
 					default:
 						motoresGirarQuietoDerecha();
+						LedsGirarQuietoDerecha();
 						break;
 				}
                 // cambiar estado
