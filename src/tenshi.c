@@ -21,6 +21,7 @@ int main() {
     uint8_t modoAccion = GIRANDO;
     uint8_t diferenciaValoresAB;
     uint8_t diferenciaValoresCD;
+    direcciones_t ultimaDireccion = DERECHA;
 
     setup();
     
@@ -62,10 +63,12 @@ int main() {
 					case ATACANDO_ADELANTE_DERECHA:
 						motoresAvanzarYGirarDerecha();
 						LedsAvanzarYGirarDerecha();
+						ultimaDireccion = DERECHA;
 						break;
 					case ATACANDO_ADELANTE_IZQUIERDA:
 						motoresAvanzarYGirarIzquierda();
 						LedsAvanzarYGirarIzquierda();
+						ultimaDireccion = IZQUIERDA;
 						break;
 					case ATACANDO_ATRAS:
 						motoresRetroceder();
@@ -74,19 +77,27 @@ int main() {
 					case ATACANDO_ATRAS_DERECHA:
 						motoresRetrocederYGirarDerecha();
 						LedsRetrocederYGirarDerecha();
+						ultimaDireccion = IZQUIERDA;
 						break;
 					case ATACANDO_ATRAS_IZQUIERDA:
 						motoresRetrocederYGirarIzquierda();
 						LedsRetrocederYGirarIzquierda();
+						ultimaDireccion = DERECHA;
 						break;
 					case GIRANDO:
 					default:
-						motoresGirarQuietoDerecha();
-						LedsGirarQuietoDerecha();
+					    if (ultimaDireccion == IZQUIERDA) {
+					        motoresGirarQuietoIzquierda();
+					        LedsGirarQuietoIzquierda();
+					    } else {
+						    motoresGirarQuietoDerecha();
+						    LedsGirarQuietoDerecha();
+						}
 						break;
 				}
                 // cambiar estado
                 modoAccion = modoAccionNuevo;
+                _delay_ms(50);
                 
             }
             

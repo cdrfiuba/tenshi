@@ -105,6 +105,11 @@ typedef enum {
     ATACANDO_ATRAS_DERECHA      = 0b0100
 } modo_accion_t;
 
+typedef enum {
+    DERECHA,
+    IZQUIERDA
+} direcciones_t;
+
 
 // Si va a avanzar derecho, prende todos los leds. Si tiene que girar, prende los leds de el lado para el cual doblar.
 #define LedsAvanzar()                    LedAOn();  LedBOn();  LedCOff(); LedDOff(); 
@@ -118,8 +123,8 @@ typedef enum {
 #define LedsEsperar()                    LedAOff(); LedBOff(); LedCOff(); LedDOff();
 
 #define LedsRetroceder()                 LedAOff(); LedBOff(); LedCOn();  LedDOn();
-#define LedsRetrocederYGirarDerecha()    LedAOff(); LedBOff(); LedCOn();  LedDOff();
-#define LedsRetrocederYGirarIzquierda()  LedAOff(); LedBOff(); LedCOff(); LedDOn();
+#define LedsRetrocederYGirarDerecha()    LedAOff(); LedBOff(); LedCOff(); LedDOn();
+#define LedsRetrocederYGirarIzquierda()  LedAOff(); LedBOff(); LedCOn();  LedDOff();
 
 
 
