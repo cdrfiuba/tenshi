@@ -96,6 +96,12 @@
 #define DIFERENCIA_EXCESIVA    50
 
 typedef enum {
+    // los valores guardados en este enum son más o menos equivalentes
+    // a los valores de los receptores
+    //                              -----> sensor C
+    //                              ||---> sensor D
+    //                              |||--> sensor A 
+    //                              ||||-> sensor B
     GIRANDO 					= 0b0000,
     ATACANDO_ADELANTE           = 0b0011,
     ATACANDO_ADELANTE_IZQUIERDA = 0b0010,

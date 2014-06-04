@@ -28,7 +28,17 @@ int main() {
     while (1) {
         if (estadoActivacion == PRENDIDO) {
 
-            // sensado
+            // para cada par de receptores (frontales AB y traseros CD) se realiza 
+            // lo siguiente: 
+            // si se encuentran entre dos límites permitidos (MINIMO y MAXIMO), 
+            // se toma la diferencia entre ellos, y si esa diferencia es inferior 
+            // a otro límite (DIFERENCIA_RELEVANTE) se asume que el oponente está 
+            // justo adelante del robot. Si está por debajo de ese límite, según 
+            // cuál de los sensores tiene el mayor valor (esto es, que está a 
+            // menor distancia del objetivo), se asume que el oponente está a la 
+            // izquierda o a la derecha.
+            // Cada modo de acción se obtiene sumando un 1 o un 0 para cada receptor,
+            // como está definido en el enum modo_accion_t.
             modoAccionNuevo = 0;
             
             if ((valorReceptorA > MINIMO_PERMITIDO && valorReceptorA < MAXIMO_PERMITIDO) || (valorReceptorB > MINIMO_PERMITIDO && valorReceptorB < MAXIMO_PERMITIDO)) {
