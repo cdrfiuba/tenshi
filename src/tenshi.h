@@ -81,6 +81,15 @@
 #define DDR_PULSADOR   def_ddr_reg(PORT_PULSADOR_NAME)
 
 
+/* Activador externo de minisumo */
+#define PORT_ACTIVADOR_NAME   D
+#define ACTIVADOR_NUMBER      7
+
+#define PORT_ACTIVADOR  def_port_reg(PORT_ACTIVADOR_NAME)
+#define PIN_ACTIVADOR   def_pin_reg(PORT_ACTIVADOR_NAME)
+#define DDR_ACTIVADOR   def_ddr_reg(PORT_ACTIVADOR_NAME)
+
+
 /* Macros */
 // Se setea como entrada y se pone el pin en '1'. Esto último hace que se 
 // active el pull-up interno
@@ -88,6 +97,10 @@
 
 // lee el pin del boton de arranque
 #define IsPulsadorSet()   IsBitSet(PIN_PULSADOR, PULSADOR_NUMBER)
+
+// activador
+#define ActivadorInit()    ClearBit(DDR_ACTIVADOR, ACTIVADOR_NUMBER); ClearBit(PORT_ACTIVADOR, ACTIVADOR_NUMBER);
+#define IsActivadorSet()   IsBitSet(PIN_ACTIVADOR, ACTIVADOR_NUMBER)
 
 
 #define MAXIMO_PERMITIDO      150
@@ -142,7 +155,7 @@ typedef enum {
 } estado_activacion_t;
 
 void setup();
-void configurarPulsador();
+void configurarPulsadorYActivador();
 void bajarPollera();
 void apagarTodo();
 void encenderTodo();

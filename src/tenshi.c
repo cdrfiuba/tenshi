@@ -14,6 +14,7 @@ extern volatile uint8_t valorReceptorC;
 extern volatile uint8_t valorReceptorD;
 
 volatile uint8_t esNecesarioCheckearBoton = 0;
+volatile uint8_t esNecesarioCheckearActivador = 0;
 
 int main() {
     estado_activacion_t estadoActivacion = APAGADO;
@@ -25,8 +26,17 @@ int main() {
 
     setup();
     
+    //while (1) {
+        //if (IsActivadorSet() == true) {
+            //LedAOn();
+        //} else {
+            //LedAOff();
+        //}
+    //}
+    
     while (1) {
         if (estadoActivacion == PRENDIDO) {
+
 
             // para cada par de receptores (frontales AB y traseros CD) se realiza 
             // lo siguiente: 
@@ -107,7 +117,7 @@ int main() {
 				}
                 // cambiar estado
                 modoAccion = modoAccionNuevo;
-                _delay_ms(50);
+                _delay_ms(5);
                 
             }
             
@@ -156,7 +166,7 @@ int main() {
         if (esNecesarioCheckearBoton == 1) {
             ClearBit(PCMSK0, PCINT0); // desactiva interrupción botón
             if (IsPulsadorSet() == true) {
-                _delay_ms(50);
+                _delay_ms(5);
                 if (IsPulsadorSet() == true) {
                     if (estadoActivacion == APAGADO) {
                         //_delay_ms(5000); // para competir hay que esperar 5 segundos
@@ -171,7 +181,21 @@ int main() {
             esNecesarioCheckearBoton = 0;
             SetBit(PCMSK0, PCINT0); // activa interrupción botón
         }
-
+        
+        // cambia a PRENDIDO o APAGADO según el estado del activador
+        if (esNecesarioCheckearActivador == 1) {
+            //ClearBit(PCMSK0, PCINT1); // desactiva interrupción activador
+            _delay_ms(5);
+            if (IsActivadorSet() == true) {
+                estadoActivacion = PRENDIDO;
+                encenderTodo();
+            } else {
+                estadoActivacion = APAGADO;
+                //apagarTodo();
+            }
+            esNecesarioCheckearActivador = 0;
+            //SetBit(PCMSK0, PCINT1); // activa interrupción botón
+        }
     }
 }
 
@@ -182,7 +206,7 @@ void setup() {
     LedBInit(); 
     LedAInit(); 
     
-    configurarPulsador();
+    configurarPulsadorYActivador();
     configurarMotores();
     configurarSensoresSuperiores();
     configurarMotorPolleras();
@@ -190,28 +214,32 @@ void setup() {
     sei();
 }
 
-void configurarPulsador() {
+void configurarPulsadorYActivador() {
     PulsadorInit();
+    ActivadorInit();
     // Configuro el pin change
-    PCICR |= (1 << PCIE0);
-    PCMSK0 = (1 << PCINT0);
+    PCICR |= (1 << PCIE0) | (1 << PCIE1);
+    PCMSK0 = (1 << PCINT0) | (1 << PCINT1);
 }
 
 ISR(PCINT0_vect) {
     esNecesarioCheckearBoton = 1;
 }
-
-
-void bajarPollera() {
-    unsigned char aux = 10;
-    while (aux > 0) {
-        SetBit(PORT_SERVO, SERVO_NUMBER);
-        _delay_ms(1);
-        ClearBit(PORT_SERVO, SERVO_NUMBER);
-        _delay_ms(19);
-        aux--;
-    }
+ISR(PCINT1_vect) {
+    esNecesarioCheckearActivador = 1;
 }
+
+
+//void bajarPollera() {
+    //unsigned char aux = 10;
+    //while (aux > 0) {
+        //SetBit(PORT_SERVO, SERVO_NUMBER);
+        //_delay_ms(1);
+        //ClearBit(PORT_SERVO, SERVO_NUMBER);
+        //_delay_ms(19);
+        //aux--;
+    //}
+//}
 
 void apagarTodo() {
     ApagarMotores();
