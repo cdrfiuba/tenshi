@@ -169,7 +169,7 @@ int main() {
                 _delay_ms(5);
                 if (IsPulsadorSet() == true) {
                     if (estadoActivacion == APAGADO) {
-                        //_delay_ms(5000); // para competir hay que esperar 5 segundos
+                        _delay_ms(1000); // para competir hay que esperar 5 segundos
                         estadoActivacion = PRENDIDO;
                         encenderTodo();
                     } else {
@@ -216,7 +216,7 @@ void setup() {
 
 void configurarPulsadorYActivador() {
     PulsadorInit();
-    ActivadorInit();
+    //ActivadorInit();
     // Configuro el pin change
     PCICR |= (1 << PCIE0) | (1 << PCIE1);
     PCMSK0 = (1 << PCINT0) | (1 << PCINT1);
@@ -226,7 +226,7 @@ ISR(PCINT0_vect) {
     esNecesarioCheckearBoton = 1;
 }
 ISR(PCINT1_vect) {
-    esNecesarioCheckearActivador = 1;
+    esNecesarioCheckearActivador = 0;
 }
 
 
