@@ -165,11 +165,12 @@ int main() {
         // cambia entre los estados PRENDIDO y APAGADO si se apretó el botón
         if (esNecesarioCheckearBoton == 1) {
             ClearBit(PCMSK0, PCINT0); // desactiva interrupción botón
+            esNecesarioCheckearBoton = 0;
             if (IsPulsadorSet() == true) {
-                _delay_ms(5);
+                _delay_ms(20);
                 if (IsPulsadorSet() == true) {
                     if (estadoActivacion == APAGADO) {
-                        _delay_ms(1000); // para competir hay que esperar 5 segundos
+                        //_delay_ms(1000); // para competir hay que esperar 5 segundos
                         estadoActivacion = PRENDIDO;
                         encenderTodo();
                     } else {
@@ -178,12 +179,12 @@ int main() {
                     }
                 }
             }
-            esNecesarioCheckearBoton = 0;
+
             SetBit(PCMSK0, PCINT0); // activa interrupción botón
         }
         
         // cambia a PRENDIDO o APAGADO según el estado del activador
-        if (esNecesarioCheckearActivador == 1) {
+        /*if (esNecesarioCheckearActivador == 1) {
             //ClearBit(PCMSK0, PCINT1); // desactiva interrupción activador
             _delay_ms(5);
             if (IsActivadorSet() == true) {
@@ -195,7 +196,7 @@ int main() {
             }
             esNecesarioCheckearActivador = 0;
             //SetBit(PCMSK0, PCINT1); // activa interrupción botón
-        }
+        }*/
     }
 }
 
@@ -218,16 +219,16 @@ void configurarPulsadorYActivador() {
     PulsadorInit();
     //ActivadorInit();
     // Configuro el pin change
-    PCICR |= (1 << PCIE0) | (1 << PCIE1);
-    PCMSK0 = (1 << PCINT0) | (1 << PCINT1);
+    PCICR |= (1 << PCIE0);
+    PCMSK0 = (1 << PCINT0);
 }
 
 ISR(PCINT0_vect) {
     esNecesarioCheckearBoton = 1;
 }
-ISR(PCINT1_vect) {
+/*ISR(PCINT1_vect) {
     esNecesarioCheckearActivador = 0;
-}
+}*/
 
 
 //void bajarPollera() {
